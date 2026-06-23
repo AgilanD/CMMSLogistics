@@ -45,4 +45,6 @@ public class VehicalDelivery {
     @JoinColumn(name = "delivered_by_id", nullable = false)
     private Employee deliveredBy;
 
+
+
 }
