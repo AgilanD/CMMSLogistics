@@ -1,12 +1,18 @@
 package cmms.Logistics.Dto;
 
 import cmms.Logistics.entity.ProductionOrder.OrderStatus;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -25,5 +31,15 @@ public class ProductionOrderResponseDto {
     private Integer completedQuantity;
     private LocalDate expectedEndDate;
     private LocalDate actualEndDate;
+
+
+
+    private LocalDateTime createdAt;
+
+    private Long createdBy;
+
+    private LocalDateTime lastModifiedAt;
+
+    private Long lastModifiedBy;
 
 }
