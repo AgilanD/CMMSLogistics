@@ -1,5 +1,6 @@
 package cmms.Logistics.entity;
 
+import cmms.Logistics.security.GatewayHeaderAuthFilter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,7 +65,19 @@ public class Notifications {
     private Long lastModifiedBy = 1L;
 
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.lastModifiedAt = LocalDateTime.now();
+        this.createdBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+        this.lastModifiedBy =Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
 
+    @PreUpdate
+    protected void onUpdate() {
+        this.lastModifiedAt = LocalDateTime.now();
+        this.lastModifiedBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
 
 
 
