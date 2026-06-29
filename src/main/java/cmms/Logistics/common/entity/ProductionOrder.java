@@ -1,12 +1,13 @@
-package cmms.Logistics.entity;
+package cmms.Logistics.common.entity;
 
-
+import cmms.Logistics.common.entity.CarModule;
+import cmms.Logistics.common.entity.Plants;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Generated;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -16,46 +17,48 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "employees")
+@Table(name = "production_orders")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Employee {
+public class ProductionOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "employee_code", nullable = false, unique = true, updatable = false)
-    private String employeeCode;
-
-    @Column(name = "full_name", nullable = false)
-    private String fullName;
+    @Generated
+    @Column(name = "order_number", nullable = false, unique = true, insertable = false, updatable = false)
+    private String orderNumber;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "plant_id", nullable = false)
     private Plants plant;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "car_model_id", nullable = false)
+    private CarModule carModel;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String designation;
+    private OrderStatus status;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date_of_birth", nullable = false)
-    private LocalDate dateOfBirth;
+    @Column(name = "target_quantity", nullable = false)
+    private Integer targetQuantity;
 
-    @Past(message = "Joining date cannot be a future date")
-    @Temporal(TemporalType.DATE)
-    @Column(name = "joining_date", nullable = false)
-    private LocalDate joiningDate;
-
-
-    @Column(name = "profile_image")
-    private String profileImage;
-
-    @Column(name = "is_active", nullable = false)
     @Builder.Default
-    private Boolean isActive = true;
+    @Column(name = "completed_quantity", nullable = false)
+    private Integer completedQuantity = 0;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "expected_end_date", nullable = false)
+    private LocalDate expectedEndDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "actual_end_date")
+    private LocalDate actualEndDate;
+
 
 
 
@@ -80,5 +83,13 @@ public class Employee {
     private Long lastModifiedBy = 1L;
 
 
+
+
+
+
+
+    public enum OrderStatus {
+        PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+    }
 
 }

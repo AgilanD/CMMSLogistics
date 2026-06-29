@@ -1,10 +1,13 @@
-package cmms.Logistics.entity;
+package cmms.Logistics.common.entity;
 
+import cmms.Logistics.common.entity.CarModule;
+import cmms.Logistics.common.entity.ProductionOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -15,47 +18,40 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "production_orders")
+@Table(name = "vehicles")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ProductionOrder {
+public class VehicleInventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Generated
-    @Column(name = "order_number", nullable = false, unique = true, insertable = false, updatable = false)
-    private String orderNumber;
+    @Column(nullable = false, unique = true, length = 17, insertable = false, updatable = false)
+    private String vin;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "plant_id", nullable = false)
-    private Plants plant;
+    @JoinColumn(name = "production_order_id", nullable = false)
+    private ProductionOrder productionOrder;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "car_model_id", nullable = false)
     private CarModule carModel;
 
+    @Column(nullable = false)
+    private String color;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrderStatus status;
+    private VehicleStatus status;
 
-    @Column(name = "target_quantity", nullable = false)
-    private Integer targetQuantity;
-
-    @Builder.Default
-    @Column(name = "completed_quantity", nullable = false)
-    private Integer completedQuantity = 0;
-
+    @CreationTimestamp
     @Temporal(TemporalType.DATE)
-    @Column(name = "expected_end_date", nullable = false)
-    private LocalDate expectedEndDate;
-
-    @Temporal(TemporalType.DATE)
-    @Column(name = "actual_end_date")
-    private LocalDate actualEndDate;
+    @Column(name = "manufactured_date", nullable = false, updatable = false)
+    private LocalDate manufacturedDate;
 
 
 
@@ -83,11 +79,8 @@ public class ProductionOrder {
 
 
 
-
-
-
-    public enum OrderStatus {
-        PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+    public enum VehicleStatus {
+        MANUFACTURED, INSPECTED, DELIVERED
     }
-
 }
+

@@ -1,55 +1,59 @@
-package cmms.Logistics.entity;
+package cmms.Logistics.common.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vehicles")
+@Table(name = "car_module")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class VehicleInventory {
+public class CarModule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Generated
-    @Column(nullable = false, unique = true, length = 17, insertable = false, updatable = false)
-    private String vin;
+    @Column(name = "model_name", nullable = false, unique = true)
+    private String modelName;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "production_order_id", nullable = false)
-    private ProductionOrder productionOrder;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "car_model_id", nullable = false)
-    private CarModule carModel;
-
-    @Column(nullable = false)
-    private String color;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "fuel_type", nullable = false)
+    private FuelType fuelType;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private VehicleStatus status;
+    private Transmission transmission;
 
-    @CreationTimestamp
+    @Column(name = "base_price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal basePrice;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "color_options", columnDefinition = "jsonb")
+    private String colorOptions;
+
     @Temporal(TemporalType.DATE)
-    @Column(name = "manufactured_date", nullable = false, updatable = false)
-    private LocalDate manufacturedDate;
+    @Column(name = "launch_date")
+    private LocalDate launchDate;
+
+    @Builder.Default
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
 
 
 
@@ -77,8 +81,19 @@ public class VehicleInventory {
 
 
 
-    public enum VehicleStatus {
-        MANUFACTURED, INSPECTED, DELIVERED
-    }
-}
 
+
+
+
+
+
+
+    public enum FuelType {
+        PETROL, DIESEL, ELECTRIC, HYBRID
+    }
+
+    public enum Transmission {
+        MANUAL, AUTOMATIC
+    }
+
+}

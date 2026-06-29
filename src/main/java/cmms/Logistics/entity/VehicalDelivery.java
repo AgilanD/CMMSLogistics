@@ -1,5 +1,8 @@
 package cmms.Logistics.entity;
 
+import cmms.Logistics.common.entity.Customers;
+import cmms.Logistics.common.entity.Employee;
+import cmms.Logistics.common.entity.VehicleInventory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;

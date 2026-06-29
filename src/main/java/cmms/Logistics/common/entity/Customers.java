@@ -1,6 +1,7 @@
-package cmms.Logistics.entity;
+package cmms.Logistics.common.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,28 +14,29 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "plants")
+@Table(name = "customers")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Plants {
+public class Customers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @Column(name = "customer_name", nullable = false)
+    private String customerName;
 
-    @Column(nullable = false, unique = true)
-    private String code;
+    @Column(name = "contact_number", nullable = false)
+    private String contactNumber;
 
+    @Email(message = "Invalid email format")
     @Column(nullable = false)
-    private String location;
+    private String email;
 
-    @Column(name = "capacity_per_day", nullable = false)
-    private Integer capacityPerDay;
+    @Column(columnDefinition = "text", nullable = false)
+    private String address;
 
     @Builder.Default
     @Column(name = "is_active", nullable = false)
@@ -42,25 +44,21 @@ public class Plants {
 
 
 
-
     @CreatedDate
-    @Builder.Default
-    @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '2026-06-23 19:54:30'")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.parse("2026-06-23T19:54:30");
 
     @CreatedBy
-    @Builder.Default
-    @Column(name = "created_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
+    @Column(name = "created_by", nullable = false)
     private Long createdBy = 1L;
 
     @LastModifiedDate
-    @Builder.Default
-    @Column(name = "last_modified_at", nullable = false, columnDefinition = "TIMESTAMP DEFAULT '2026-06-23 19:54:30'")
+    @Column(name = "last_modified_at", nullable = false)
     private LocalDateTime lastModifiedAt = LocalDateTime.parse("2026-06-23T19:54:30");
 
     @LastModifiedBy
-    @Builder.Default
-    @Column(name = "last_modified_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
+    @Column(name = "last_modified_by", nullable = false)
     private Long lastModifiedBy = 1L;
-}
 
+
+}

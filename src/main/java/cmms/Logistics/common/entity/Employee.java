@@ -1,60 +1,61 @@
-package cmms.Logistics.entity;
+package cmms.Logistics.common.entity;
+
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "car_module")
+@Table(name = "employees")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class CarModule {
+public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "model_name", nullable = false, unique = true)
-    private String modelName;
+    @Column(name = "employee_code", nullable = false, unique = true, updatable = false)
+    private String employeeCode;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "fuel_type", nullable = false)
-    private FuelType fuelType;
+    @Column(name = "full_name", nullable = false)
+    private String fullName;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "plant_id", nullable = false)
+    private Plants plant;
+
     @Column(nullable = false)
-    private Transmission transmission;
-
-    @Column(name = "base_price", nullable = false, precision = 12, scale = 2)
-    private BigDecimal basePrice;
-
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "color_options", columnDefinition = "jsonb")
-    private String colorOptions;
+    private String designation;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "launch_date")
-    private LocalDate launchDate;
+    @Column(name = "date_of_birth", nullable = false)
+    private LocalDate dateOfBirth;
 
-    @Builder.Default
+    @Past(message = "Joining date cannot be a future date")
+    @Temporal(TemporalType.DATE)
+    @Column(name = "joining_date", nullable = false)
+    private LocalDate joiningDate;
+
+
+    @Column(name = "profile_image")
+    private String profileImage;
+
     @Column(name = "is_active", nullable = false)
+    @Builder.Default
     private Boolean isActive = true;
-
-
 
 
 
@@ -79,21 +80,5 @@ public class CarModule {
     private Long lastModifiedBy = 1L;
 
 
-
-
-
-
-
-
-
-
-
-    public enum FuelType {
-        PETROL, DIESEL, ELECTRIC, HYBRID
-    }
-
-    public enum Transmission {
-        MANUAL, AUTOMATIC
-    }
 
 }
