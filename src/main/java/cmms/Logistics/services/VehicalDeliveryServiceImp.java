@@ -63,6 +63,7 @@ public class VehicalDeliveryServiceImp implements VehicalDeliveryServices {
 
      @Override
      public VehicalDeliveryResponseDto updateDelivery(Long id, VehicalDeliveryRequestDto requestDto) {
+
           VehicalDelivery existingDelivery = repository.findById(id)
                   .orElseThrow(() -> new EntityNotFoundException("Delivery record not found with id: " + id));
 

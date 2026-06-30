@@ -4,6 +4,7 @@ import cmms.Logistics.common.entity.Customers;
 import cmms.Logistics.common.entity.Employee;
 import cmms.Logistics.common.entity.VehicleInventory;
 import cmms.Logistics.security.GatewayHeaderAuthFilter;
+import cmms.Logistics.security.UserContext;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
@@ -81,14 +82,15 @@ public class VehicalDelivery {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
-        this.createdBy = Long.valueOf(GatewayHeaderAuthFilter.username);
-        this.lastModifiedBy =Long.valueOf(GatewayHeaderAuthFilter.username);
+
+        this.createdBy = UserContext.getUserId();
+        this.lastModifiedBy = UserContext.getUserId();
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.lastModifiedAt = LocalDateTime.now();
-        this.lastModifiedBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+        this.lastModifiedBy = UserContext.getUserId();
     }
 
 

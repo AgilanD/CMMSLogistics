@@ -1,6 +1,7 @@
 package cmms.Logistics.entity;
 
 import cmms.Logistics.security.GatewayHeaderAuthFilter;
+import cmms.Logistics.security.UserContext;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -69,17 +70,16 @@ public class Notifications {
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.lastModifiedAt = LocalDateTime.now();
-        this.createdBy = Long.valueOf(GatewayHeaderAuthFilter.username);
-        this.lastModifiedBy =Long.valueOf(GatewayHeaderAuthFilter.username);
+
+        this.createdBy = UserContext.getUserId();
+        this.lastModifiedBy = UserContext.getUserId();
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.lastModifiedAt = LocalDateTime.now();
-        this.lastModifiedBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+        this.lastModifiedBy = UserContext.getUserId();
     }
-
-
 
 
     public enum RecipientRole {
