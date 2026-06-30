@@ -7,7 +7,11 @@ import cmms.Logistics.Dto.VehicalDeliveryRequestDto;
 import cmms.Logistics.Dto.VehicalDeliveryResponseDto;
 import cmms.Logistics.services.NotificationsServices;
 import cmms.Logistics.services.VehicalDeliveryServices;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.juli.logging.Log;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/Logistics")
 @RequiredArgsConstructor
+@Slf4j
 public class LogisticsController {
 
     private final VehicalDeliveryServices service;
@@ -23,7 +28,9 @@ public class LogisticsController {
 
 
     @GetMapping("/checking")
+    @PreAuthorize("hasAnyRole('ADMIN','PLANT_MANAGER')")
     public String Checkings(){
+        log.info("I am in the Logistic Controller");
         return "Input Checking for the Logistics GetMapping";
     }
 
@@ -38,14 +45,16 @@ public class LogisticsController {
     }
 
     @GetMapping("/GetAllDeliveries")
+    @PreAuthorize("hasAnyRole('ADMIN','PLANT_MANAGER')")
     public List<VehicalDeliveryResponseDto> getAllVehical() {
+       log.info("Hello Guys");
         return service.getAllDeliveries();
     }
 
-    @PutMapping("/UpdateById/{id}")
-    public VehicalDeliveryResponseDto updateVehical(
-            @PathVariable Long id,
-            @RequestBody VehicalDeliveryRequestDto requestDto) {
+    @PutMapping("/UpdateByIdVehicals/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','PLANT_MANAGER')")
+    public VehicalDeliveryResponseDto updateVehical( @PathVariable Long id, @RequestBody VehicalDeliveryRequestDto requestDto) {
+        log.info("Hello Guys");
         return service.updateDelivery(id, requestDto);
     }
 
@@ -66,6 +75,7 @@ public class LogisticsController {
     }
 
     @GetMapping("/GetAllNotifications")
+    @PreAuthorize("hasAnyRole('ADMIN','PLANT_MANAGER')")
     public List<NotificationsResponseDto> getAllNotifications() {
         return Notificationsservice.getAllNotifications();
     }
