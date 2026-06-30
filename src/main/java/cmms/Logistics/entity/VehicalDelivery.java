@@ -3,6 +3,7 @@ package cmms.Logistics.entity;
 import cmms.Logistics.common.entity.Customers;
 import cmms.Logistics.common.entity.Employee;
 import cmms.Logistics.common.entity.VehicleInventory;
+import cmms.Logistics.security.GatewayHeaderAuthFilter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.AllArgsConstructor;
@@ -75,6 +76,20 @@ public class VehicalDelivery {
     @Column(name = "last_modified_by", nullable = false, columnDefinition = "BIGINT DEFAULT 1")
     private Long lastModifiedBy = 1L;
 
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.lastModifiedAt = LocalDateTime.now();
+        this.createdBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+        this.lastModifiedBy =Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.lastModifiedAt = LocalDateTime.now();
+        this.lastModifiedBy = Long.valueOf(GatewayHeaderAuthFilter.username);
+    }
 
 
 
