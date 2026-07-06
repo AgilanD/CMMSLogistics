@@ -60,12 +60,6 @@
         </dependency>
         <dependency>
             <groupId>cmms</groupId>
-            <artifactId>HumanResource</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>cmms</groupId>
             <artifactId>Production</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
@@ -74,7 +68,7 @@
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
         </dependency>
-    </dependencies>
+	</dependencies>
 
 	<build>
 		<plugins>
